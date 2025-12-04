@@ -1,0 +1,22 @@
+:popover-open {
+  display: block;
+  width: 250px;
+  padding: 1rem;
+  position: absolute;
+  inset: unset;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 4px;
+  margin: 0;
+  animation: slidein 0.1s;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
