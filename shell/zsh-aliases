@@ -1,0 +1,36 @@
+# Create git work tree and switch to it
+gwkt() {
+  local dir="$1"
+  local branch="$2"
+
+  if [ -z "$dir" ] || [ -z "$branch" ]; then
+    echo "Usage: gwkt <directory> <existing-branch>"
+    return 1
+  fi
+
+  # If the branch doesn't exist locally, try to fetch it from origin
+  if ! git rev-parse --verify "$branch" >/dev/null 2>&1; then
+    git fetch origin "$branch":"$branch" || return 1
+  fi
+
+  git worktree add "$dir" "$branch" || return 1
+  cd "$dir" || return 1
+}
+
+# Create pull request
+azprc() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: azprc <issueNumber> <description>"
+        return 1
+    fi
+    
+    issueNumber=$1
+    shift
+    description="$*"
+    
+    prChecklist="" # flaky
+
+    az repos pr create --open --draft --work-items "$issueNumber" \
+                     --title "[$issueNumber] $description" \
+                     --description "$prChecklist"
+}
